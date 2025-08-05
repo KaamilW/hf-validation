@@ -61,7 +61,7 @@ while True:
         latest = get_latest_block()
         with open(LOG_FILE, 'a') as f:
             if latest < TARGET_BLOCK:
-                message = f"Current block {latest}, waiting for {TARGET_BLOCK}..."
+                message = f"Current block {latest}, there are still miner rewards, waiting for {TARGET_BLOCK}... "
                 print(message)
                 f.write(message + "\n")
             else:
