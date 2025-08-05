@@ -59,11 +59,13 @@ print(f"Starting watch from block {last_checked + 1}")
 while True:
     try:
         latest = get_latest_block()
-        if latest < TARGET_BLOCK:
-            print(f"Current block {latest}, waiting for {TARGET_BLOCK}...")
-        else:
-            if latest > last_checked:
-                with open(LOG_FILE, 'a') as f:
+        with open(LOG_FILE, 'a') as f:
+            if latest < TARGET_BLOCK:
+                message = f"Current block {latest}, waiting for {TARGET_BLOCK}..."
+                print(message)
+                f.write(message + "\n")
+            else:
+                if latest > last_checked:
                     for block_num in range(last_checked + 1, latest + 1):
                         has_reward = has_miner_reward(block_num)
                         yes_no = "yes" if has_reward else "no"
@@ -72,7 +74,11 @@ while True:
                             message += " there should not be rewards anymore - smth seems wrong"
                         print(message)
                         f.write(message + "\n")
-                last_checked = latest
+                    last_checked = latest
+                else:
+                    message = f"Latest block {latest}, no new blocks since last check."
+                    print(message)
+                    f.write(message + "\n")
         
         # Commit and push to GitHub after each iteration
         try:
